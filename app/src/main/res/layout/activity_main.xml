@@ -57,6 +57,7 @@
             android:id="@+id/word2"
             android:padding="10dp"
             android:background="#ffffff" />
+
     </LinearLayout>
 
     <Button

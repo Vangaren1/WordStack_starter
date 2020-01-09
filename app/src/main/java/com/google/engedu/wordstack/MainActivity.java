@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> words = new ArrayList<>();
     private Random random = new Random();
     private StackedLayout stackedLayout;
+    private Stack<LetterTile> placedTile;
     private String word1, word2, shuffled;
 
 
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         }
         LinearLayout verticalLayout = (LinearLayout) findViewById(R.id.vertical_layout);
         stackedLayout = new StackedLayout(this);
+        placedTile = new Stack<LetterTile>();
         verticalLayout.addView(stackedLayout, 3);
 
         View word1LinearLayout = findViewById(R.id.word1);
@@ -94,11 +96,8 @@ public class MainActivity extends AppCompatActivity {
                     TextView messageBox = (TextView) findViewById(R.id.message_box);
                     messageBox.setText(word1 + " " + word2);
                 }
-                /**
-                 **
-                 **  YOUR CODE GOES HERE
-                 **
-                 **/
+                if(tile != null)
+                    placedTile.push(tile);
                 return true;
             }
             return false;
@@ -135,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                         messageBox.setText(word1 + " " + word2);
                     }
                     /**
-                     **
+                     ** TODO
                      **  YOUR CODE GOES HERE
                      **
                      **/
@@ -168,6 +167,14 @@ public class MainActivity extends AppCompatActivity {
             Log.d("pushingOntoStack", ""+shuffled.charAt(i) );
             stackedLayout.push(tmp);
         }
+
+        ViewGroup word1LinearLayout = findViewById(R.id.word1);
+        ViewGroup word2LinearLayout = findViewById(R.id.word2);
+        word1LinearLayout.removeAllViews();
+        word2LinearLayout.removeAllViews();
+
+        stackedLayout.clear();
+
         return true;
     }
 
@@ -179,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
 
         int w1Index=0;
         int w2Index=0;
-
 
         while(w1Index < WORD_LENGTH || w2Index < WORD_LENGTH){
             coin = rand.nextInt(2);
@@ -203,16 +209,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-
         return shuffled;
     }
 
     public boolean onUndo(View view) {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+        // check if there is a placed tile, if not, do nothing
+        Log.d("undo-test", "attempting to undo a placed tile");
+        if(placedTile.size()>0)
+        {
+            LetterTile tmp = placedTile.pop();
+            tmp.moveToViewGroup(stackedLayout);
+        }
         return true;
     }
 }

@@ -17,6 +17,7 @@ package com.google.engedu.wordstack;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.util.Stack;
@@ -30,20 +31,32 @@ public class StackedLayout extends LinearLayout {
     }
 
     public void push(View tile) {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+        // if the stack is not empty, we need to remove the view that's on the top first
+        if(tiles.size()>0)
+            removeView(tiles.peek());
+        // Push the tile onto the stack, and make it visible.
+        tiles.push(tile);
+        addView(tile);
     }
 
     public View pop() {
         View popped = null;
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+
+        // male sure there's something to pop before popping. If there isn't, return null
+        if(tiles.size() > 0)
+        {
+            // if there is something to pop, pop it from the pile and remove it from view
+            View tile = tiles.pop();
+            removeView(tile);
+
+            // if there still is something on the stack, then make the top of the stack visible
+            if(tiles.size() > 0)
+            {
+                View top = tiles.peek();
+                addView(top);
+            }
+        }
+
         return popped;
     }
 
@@ -57,7 +70,7 @@ public class StackedLayout extends LinearLayout {
 
     public void clear() {
         /**
-         **
+         ** TODO
          **  YOUR CODE GOES HERE
          **
          **/
