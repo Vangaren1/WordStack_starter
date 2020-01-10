@@ -16,68 +16,77 @@
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/winningScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.google.engedu.wordstack.MainActivity">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/vertical_layout">
+        android:id="@+id/vertical_layout"
+        android:layout_width="395dp"
+        android:layout_height="332dp"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/message_box"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!"
-            android:id="@+id/message_box" />
+            android:layout_height="wrap_content" />
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_below="@+id/message_box"
-            android:minHeight="60dp"
-            android:layout_margin="10dp"
             android:id="@+id/word1"
-            android:padding="10dp"
-            android:background="#ffffff"/>
-
-        <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_below="@+id/message_box"
-            android:minHeight="60dp"
             android:layout_margin="10dp"
+            android:background="#ffffff"
+            android:minHeight="60dp"
+            android:orientation="horizontal"
+            android:padding="10dp" />
+
+        <LinearLayout
             android:id="@+id/word2"
-            android:padding="10dp"
-            android:background="#ffffff" />
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@+id/message_box"
+            android:layout_margin="10dp"
+            android:background="#ffffff"
+            android:minHeight="60dp"
+            android:orientation="horizontal"
+            android:padding="10dp" />
 
     </LinearLayout>
 
     <Button
+        android:id="@+id/start_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start"
-        android:id="@+id/start_button"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:onClick="onStartGame" />
+        android:layout_alignParentBottom="true"
+        android:onClick="onStartGame"
+        android:text="Start" />
 
     <Button
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Undo"
-        android:id="@+id/button"
-        android:layout_toRightOf="@id/start_button"
         android:layout_alignTop="@+id/start_button"
-        android:layout_marginLeft="20dp"
         android:layout_marginStart="20dp"
-        android:onClick="onUndo" />
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/start_button"
+        android:onClick="onUndo"
+        android:text="Undo" />
+
+    <TextView
+        android:id="@+id/winningText"
+        android:layout_width="311dp"
+        android:layout_height="115dp"
+        android:layout_below="@+id/vertical_layout"
+        android:layout_alignEnd="@+id/vertical_layout"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="40dp" />
 
 </RelativeLayout>

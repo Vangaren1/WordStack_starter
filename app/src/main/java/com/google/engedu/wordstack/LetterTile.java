@@ -66,6 +66,11 @@ public class LetterTile extends TextView {
         frozen = false;
     }
 
+    public Character retChar()
+    {
+        return letter;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
 

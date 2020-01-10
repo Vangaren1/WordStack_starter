@@ -70,7 +70,7 @@ public class StackedLayout extends LinearLayout {
 
     public void clear() {
         /**
-         ** TODO
+         **
          **  YOUR CODE GOES HERE
          **
          **/

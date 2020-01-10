@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
     private Random random = new Random();
     private StackedLayout stackedLayout;
     private Stack<LetterTile> placedTile;
-    private String word1, word2, shuffled;
+    private Stack<Integer> placedLocID;
+    private String word1, word2, tempWord1, tempWord2, shuffled;
+    TextView win;
 
 
     @Override
@@ -75,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout verticalLayout = (LinearLayout) findViewById(R.id.vertical_layout);
         stackedLayout = new StackedLayout(this);
         placedTile = new Stack<LetterTile>();
+        placedLocID = new Stack<Integer>();
+        win = (TextView)findViewById(R.id.winningText);
+        win.setText("");
         verticalLayout.addView(stackedLayout, 3);
 
         View word1LinearLayout = findViewById(R.id.word1);
@@ -92,12 +97,15 @@ public class MainActivity extends AppCompatActivity {
             if (event.getAction() == MotionEvent.ACTION_DOWN && !stackedLayout.empty()) {
                 LetterTile tile = (LetterTile) stackedLayout.peek();
                 tile.moveToViewGroup((ViewGroup) v);
-                if (stackedLayout.empty()) {
-                    TextView messageBox = (TextView) findViewById(R.id.message_box);
-                    messageBox.setText(word1 + " " + word2);
-                }
+//                if (stackedLayout.empty()) {
+//                    TextView messageBox = (TextView) findViewById(R.id.message_box);
+//                    //messageBox.setText(word1 + " " + word2);
+//                }
                 if(tile != null)
+                {
+                    placedLocID.push(v.getId());
                     placedTile.push(tile);
+                }
                 return true;
             }
             return false;
@@ -129,12 +137,36 @@ public class MainActivity extends AppCompatActivity {
                     // Dropped, reassign Tile to the target Layout
                     LetterTile tile = (LetterTile) event.getLocalState();
                     tile.moveToViewGroup((ViewGroup) v);
-                    if (stackedLayout.empty()) {
-                        TextView messageBox = (TextView) findViewById(R.id.message_box);
-                        messageBox.setText(word1 + " " + word2);
-                    }
+//                    if (stackedLayout.empty()) {
+//                        TextView messageBox = (TextView) findViewById(R.id.message_box);
+//                        messageBox.setText(word1 + " " + word2);
+//                    }
 
+                    Log.d("PlacingTile", "Placing letter "+tile.retChar());
+                    if(v.getId()==findViewById(R.id.word1).getId())
+                    {
+                        Log.d("PlacingTile", "Placing into word1");
+                        tempWord1 += tile.retChar();
+                        placedLocID.push(v.getId());
+                    }
+                    else
+                    {
+                        Log.d("PlacingTile","Placing into word2");
+                        tempWord2 += tile.retChar();
+                        placedLocID.push(v.getId());
+                    }
                     placedTile.push(tile);
+
+
+
+                    if(placedTile.size()==10)
+                    {
+                        checkIfValid();
+                    }
+                    else
+                    {
+                        win.setText("");
+                    }
 
                     return true;
             }
@@ -146,6 +178,12 @@ public class MainActivity extends AppCompatActivity {
         TextView messageBox = (TextView) findViewById(R.id.message_box);
         messageBox.setText("Game started");
 
+        // reset the stacks, this isn't needed on the first run, but on subsequent runs it is.
+        placedTile = new Stack<LetterTile>();
+        placedLocID = new Stack<Integer>();
+        win = (TextView)findViewById(R.id.winningText);
+        win.setText("");
+
         //pick two random words by their indexices
         int numWords = words.size();
         Random rand = new Random();
@@ -153,8 +191,13 @@ public class MainActivity extends AppCompatActivity {
         word1 = words.get(rand.nextInt(numWords));
         word2 = words.get(rand.nextInt(numWords));
 
+//        word1 = "dates";
+//        word2 = "loved";
+
         // shuffle the words and store it in shuffled
         shuffled = shuffleIt(word1, word2);
+        tempWord1="";
+        tempWord2="";
 
         Log.d("words_chosen", "word1:"+word1+" word2:"+word2+" shuffled:"+shuffled);
 
@@ -213,11 +256,51 @@ public class MainActivity extends AppCompatActivity {
     public boolean onUndo(View view) {
         // check if there is a placed tile, if not, do nothing
         Log.d("undo-test", "attempting to undo a placed tile");
+
+        win.setText("");
         if(placedTile.size()>0)
         {
             LetterTile tmp = placedTile.pop();
+            Log.d("UndoTile", "Undo "+tmp.retChar());
+            int viewID = placedLocID.pop();
+            if(viewID == findViewById(R.id.word1).getId())
+            {
+                Log.d("UndoTile", "Removing from word1");
+                tempWord1 = tempWord1.substring(0,tempWord1.length() - 1);
+            }
+            else
+            {
+                Log.d("UndoTile","Removing from word2");
+                tempWord2 = tempWord2.substring(0,tempWord2.length()-1);
+            }
             tmp.moveToViewGroup(stackedLayout);
+            Log.d("UndoWords", tempWord1+" "+tempWord2);
         }
         return true;
+    }
+
+    public void checkIfValid()
+    {
+        boolean first = words.contains(tempWord1);
+        boolean second = words.contains(tempWord2);
+
+        String winCheck = word1;
+        winCheck += " ";
+        winCheck += word2;
+        winCheck += " ";
+        winCheck += tempWord1;
+        winCheck += " ";
+        winCheck += tempWord2;
+        Log.d("winCheck", winCheck);
+
+        if(words.contains(tempWord1) && words.contains(tempWord2))
+        {
+
+            win.setText("YOU WIN!");
+        }
+        else
+        {
+            win.setText("Both words not valid");
+        }
     }
 }
